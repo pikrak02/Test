@@ -65,19 +65,19 @@ button {
 
 #buttons {
     display: flex;
-    flex-direction: row; /* Change the flex direction to row */
+    flex-direction: row; 
     align-items: center;
-    justify-content: center; /* Add justify-content to center the buttons */
+    justify-content: center; 
     margin-top: 10px;
 }
 
 button {
     padding: 10px 20px;
     font-size: 16px;
-    width: 45%; /* Adjust the width to make space for both buttons */
+    width: 45%; 
     height: 75%;
     max-width: 300px;
     margin-bottom: 10px;
-    margin-right: 10px; /* Add margin-right to create space between the buttons */
+    margin-right: 10px; 
 }
 
