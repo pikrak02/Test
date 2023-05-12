@@ -1,0 +1,83 @@
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#gameCanvas {
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #fff;
+}
+
+#score-board {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 10px;
+}
+
+#d-pad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#up-button, #down-button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#left-right-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin: 10px 0;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    width: 55%;
+    max-width: 300px;
+    margin-bottom: 10px;
+}
+
+#buttons {
+    display: flex;
+    flex-direction: row; /* Change the flex direction to row */
+    align-items: center;
+    justify-content: center; /* Add justify-content to center the buttons */
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    width: 45%; /* Adjust the width to make space for both buttons */
+    height: 75%;
+    max-width: 300px;
+    margin-bottom: 10px;
+    margin-right: 10px; /* Add margin-right to create space between the buttons */
+}
+
