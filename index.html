@@ -40,7 +40,6 @@
 
         <script>
 
-            // Game grid
             var grid = [
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 5, 2, 2, 1],
@@ -60,58 +59,45 @@
                 [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 5, 2, 2, 2, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
             ];
-            // Get the canvas and context
             var canvas = document.getElementById('gameCanvas');
             var ctx = canvas.getContext('2d');
 
-// Size of each cell in the grid
             var cellSize = 30;
             var score = 0;
-            // Lives
             var lives = 3;
             var level = 1;
             var moves = 0;
-// Ghost start positions
 
 
 
-// Power-up state
             var powerUp = false;
 
-// Function to draw the game
             function drawGame() {
-                // Clear the canvas
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 for (var y = 0; y < grid.length; y++) {
                     for (var x = 0; x < grid[y].length; x++) {
-                        // Get the current cell
                         var cell = grid[y][x];
 
                         if (cell === 1) {
-                            // Draw a wall
                             ctx.fillStyle = 'blue';
                             ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
                         } else if (cell === 2) {
-                            // Draw a dot
                             ctx.fillStyle = 'white';
                             ctx.beginPath();
                             ctx.arc((x * cellSize) + cellSize / 2, (y * cellSize) + cellSize / 2, cellSize / 4, 0, Math.PI * 2, true);
                             ctx.fill();
                         } else if (cell === 3) {
-                            // Draw a power-up
                             ctx.fillStyle = 'red';
                             ctx.beginPath();
                             ctx.arc((x * cellSize) + cellSize / 2, (y * cellSize) + cellSize / 2, cellSize / 2, 0, Math.PI * 2, true);
                             ctx.fill();
                         } else if (cell === 4) {
-                            // Draw Pac-Man
                             ctx.fillStyle = 'yellow';
                             ctx.beginPath();
                             ctx.arc((x * cellSize) + cellSize / 2, (y * cellSize) + cellSize / 2, cellSize / 2, 0, Math.PI * 2, true);
                             ctx.fill();
                         } else if (cell === 5) {
-                            // Draw a ghost
                             ctx.fillStyle = 'green';
                             ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
                         }
@@ -120,7 +106,6 @@
             }
 
 
-// Call the draw function
             drawGame();
 
             let highScore = localStorage.getItem('highScore') || 0;
@@ -154,10 +139,8 @@
                 useButtons = !useButtons;
 
                 if (useButtons) {
-                    // Enable button controls
                     document.getElementById('controls').style.display = 'block';
                 } else {
-                    // Disable button controls and enable gyroscope controls
                     document.getElementById('controls').style.display = 'none';
                 }
             });
@@ -182,17 +165,17 @@
 
             if (window.DeviceOrientationEvent) {
                 window.addEventListener('deviceorientation', function (event) {
-                    var alpha = event.alpha; // rotation around z-axis
-                    var beta = event.beta; // front to back motion
-                    var gamma = event.gamma; // left to right motion
+                    var alpha = event.alpha; 
+                    var beta = event.beta; 
+                    var gamma = event.gamma; 
 
-                    if (beta > 10) { // tilt down
+                    if (beta > 10) { 
                         movePacman(0, 1);
-                    } else if (beta < -10) { // tilt up
+                    } else if (beta < -10) { 
                         movePacman(0, -1);
-                    } else if (gamma > 10) { // tilt right
+                    } else if (gamma > 10) { 
                         movePacman(1, 0);
-                    } else if (gamma < -10) { // tilt left
+                    } else if (gamma < -10) { 
                         movePacman(-1, 0);
                     }
                 });
@@ -212,10 +195,8 @@
                 var newX = pacmanPosition.x + dx;
                 var newY = pacmanPosition.y + dy;
 
-                // Check what the new position is
                 var newPosition = grid[newY][newX];
-                if (newPosition !== 1) {  // Not a wall
-                    // If it's a dot, increase the score
+                if (newPosition !== 1) {  
 
                     if (newPosition === 2) {
                         score += 10;
@@ -238,13 +219,10 @@
                             }
                         }
 
-                        // If there are no more dots, go to the next level
                         if (!dotsLeft) {
-                            level++;
-                            loadLevel(level);
+                            alert('Vyhrál jsi!');
                         }
                     }
-                    // If it's a power-up, activate the power-up
                     else if (newPosition === 3) {
                         powerUp = true;
                         setTimeout(function () {
@@ -252,16 +230,13 @@
                         }, 5000);
                     }
 
-                    // Update Pac-Man's position in the grid
                     grid[pacmanPosition.y][pacmanPosition.x] = 0;
                     pacmanPosition.x = newX;
                     pacmanPosition.y = newY;
                     grid[newY][newX] = 4;
 
-                    // Redraw the game
                     drawGame();
                 }
-                // Check if the new position is a ghost
                 if (newPosition === 5) {
                     if (powerUp) {
                         score += 100;
@@ -269,13 +244,11 @@
                             highScore = score;
                             localStorage.setItem('highScore', highScore);
                         }
-                        // Eat the ghost
                         document.getElementById('eat').play();
                         for (var i = 0; i < ghostPositions.length; i++) {
                             if (ghostPositions[i].y === newX && ghostPositions[i].x === newY) {
                                 grid[ghostPositions.y][ghostPositions.x] = 0;
 
-                                // Set a timer to respawn the ghost after 5 seconds
                                 setTimeout(function () {
                                     ghostPositions[i] = {...ghostStartPositions[i]};
                                     grid[ghostPositions[i].x][ghostPositions[i].y] = 5;
@@ -283,16 +256,12 @@
                             }
                         }
                     } else {
-                        // Lose a life
                         document.getElementById('lose-life').play();
                         lives--;
                         if (lives <= 0) {
-                            // Game over
                             alert('Game over!');
                             location.reload();
-                            // Reset the game or redirect to a game over screen
                         } else {
-                            // Reset Pac-Man and the ghosts to their starting positions
                             alert('You died you have ' + lives + ' more lives. Press down to continue!');
                             pacmanPosition = {...pacmanStartPosition};
                             grid[pacmanPosition.y][pacmanPosition.x] = 4;
@@ -311,7 +280,6 @@
 
 
 
-            // Ghost positions
             var ghostPositions = [];
             for (var y = 0; y < grid.length; y++) {
                 for (var x = 0; x < grid[y].length; x++) {
@@ -337,10 +305,8 @@
                 var newX = ghostPosition.x + dx;
                 var newY = ghostPosition.y + dy;
 
-                // Check if the new position is a wall
                 if (grid[newY][newX] !== 1) {
 
-                    // Update the ghost's position in the grid
                     grid[ghostPosition.y][ghostPosition.x] = 0;
 
                     ghostPosition.x = newX;
@@ -352,28 +318,7 @@
             }
 
 
-
-            function loadLevel(level) {
-                // Clear the current grid
-                for (var y = 0; y < grid.length; y++) {
-                    for (var x = 0; x < grid[y].length; x++) {
-                        grid[y][x] = 0;
-                    }
-                }
-
-                // Load the new level
-                // This could be a new layout for the grid, with new positions for the dots, power-ups, Pac-Man, and the ghosts
-                // For now, let's just put Pac-Man back at his starting position, and put the ghosts back at their starting positions
-                pacmanPosition = {...pacmanStartPosition};
-                grid[pacmanPosition.y][pacmanPosition.x] = 4;
-                ghostPositions = [...ghostStartPositions];
-                for (var i = 0; i < ghostPositions.length; i++) {
-                    grid[ghostPositions[i].y][ghostPositions[i].x] = 5;
-                }
-
-                // Redraw the game
-                drawGame();
-            }
+            
 
 
             setInterval(moveGhosts, 500);
