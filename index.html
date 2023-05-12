@@ -165,17 +165,17 @@
 
             if (window.DeviceOrientationEvent) {
                 window.addEventListener('deviceorientation', function (event) {
-                    var alpha = event.alpha; 
-                    var beta = event.beta; 
-                    var gamma = event.gamma; 
+                    var alpha = event.alpha;
+                    var beta = event.beta;
+                    var gamma = event.gamma;
 
-                    if (beta > 10) { 
+                    if (beta > 10) {
                         movePacman(0, 1);
-                    } else if (beta < -10) { 
+                    } else if (beta < -10) {
                         movePacman(0, -1);
-                    } else if (gamma > 10) { 
+                    } else if (gamma > 10) {
                         movePacman(1, 0);
-                    } else if (gamma < -10) { 
+                    } else if (gamma < -10) {
                         movePacman(-1, 0);
                     }
                 });
@@ -196,7 +196,7 @@
                 var newY = pacmanPosition.y + dy;
 
                 var newPosition = grid[newY][newX];
-                if (newPosition !== 1) {  
+                if (newPosition !== 1) {
 
                     if (newPosition === 2) {
                         score += 10;
@@ -222,8 +222,7 @@
                         if (!dotsLeft) {
                             alert('Vyhrál jsi!');
                         }
-                    }
-                    else if (newPosition === 3) {
+                    } else if (newPosition === 3) {
                         powerUp = true;
                         setTimeout(function () {
                             powerUp = false;
@@ -313,12 +312,47 @@
                     ghostPosition.y = newY;
                     grid[newY][newX] = 5;
                 }
+                if (grid[newY][newX] === 4) {
+                    if (powerUp) {
+                        score += 100;
+                        if (score > highScore) {
+                            highScore = score;
+                            localStorage.setItem('highScore', highScore);
+                        }
+                        document.getElementById('eat').play();
+                        for (var i = 0; i < ghostPositions.length; i++) {
+                            if (ghostPositions[i].y === newX && ghostPositions[i].x === newY) {
+                                grid[ghostPositions.y][ghostPositions.x] = 0;
+
+                                setTimeout(function () {
+                                    ghostPositions[i] = {...ghostStartPositions[i]};
+                                    grid[ghostPositions[i].x][ghostPositions[i].y] = 5;
+                                }, 5000);
+                            }
+                        }
+                    } else {
+                        document.getElementById('lose-life').play();
+                        lives--;
+                        if (lives <= 0) {
+                            alert('Game over!');
+                            location.reload();
+                        } else {
+                            alert('You died you have ' + lives + ' more lives. Press down to continue!');
+                            pacmanPosition = {...pacmanStartPosition};
+                            grid[pacmanPosition.y][pacmanPosition.x] = 4;
+                            ghostPositions = [...ghostStartPositions];
+                            for (var i = 0; i < ghostPositions.length; i++) {
+                                grid[ghostPositions[i].y][ghostPositions[i].x] = 5;
+                            }
+                        }
+                    }
+                }
 
 
             }
 
 
-            
+
 
 
             setInterval(moveGhosts, 500);
